@@ -1,10 +1,9 @@
-<<<<<<< HEAD
-=======
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# +
 # L'objet de cette partie est de trouver les pays qui ont eu les plus grosses explosions en terme d'importation / exportation depuis 1980,
 # et de représenter cette évolution. Calculer simplement le ratio entre importation (ou exportation) entre 2021 et 1980 a donné des résultats
 # non significatifs, valorisant des pays dont l'importation (ou l'exportation) était pratiquement nulle au départ et qui a connu une légère
@@ -86,85 +85,6 @@ plt.legend()
 plt.title('Exportation du top 3 entre 1980 et 2021')
 plt.show()
 
-
-## Le but de cette partie est le même que le pécédent mais sur les consommation et les productions d'électricité 
-
-df = pd.read_csv("world-country-electricity.csv", na_values = ["--", "ie"])
-df.Features.str.strip
-df.Region.str.strip
-
-# Donne la datframe des 5 pays ayant la plus grande croissance en génération
-mask = (df["Features"] == "net generation") 
-df2 = df[mask]
-df2["1980"] = pd.to_numeric(df["1980"])
-df2["2021"] = pd.to_numeric(df["2021"])
-df2["évolution"] = (df2["2021"]-df2["1980"])/df2["1980"]
-df2_sorted = df2.sort_values(by = "évolution", ascending = False)
-rise_generation = df2_sorted.iloc[1:6]
-
-# Tracé de l'évolution de la génération de 3 premiers pays au cours du temps 
-X = np.arange(1980, 2022)
-f1 = rise_generation.iloc[0, 3:-1].tolist()
-f2 = rise_generation.iloc[1, 3:-1].tolist()
-f3 = rise_generation.iloc[2, 3:-1].tolist()
-plt.plot(X, f1, label = rise_generation.iloc[0, 0])
-plt.plot(X, f2, label = rise_generation.iloc[1, 0])
-plt.plot(X, f3, label = rise_generation.iloc[2,0])
-plt.legend()
-plt.title('Top 3 des pays ayant eu la plus grande croissnace en terme de production energie')
-plt.show()
-
-
-#même chose mais avec les pays les plus consommateurs 
-mask = (df["Features"] == "net consumption") 
-df2 = df[mask]
-df2["1980"] = pd.to_numeric(df["1980"])
-df2["2021"] = pd.to_numeric(df["2021"])
-df2["évolution"] = (df2["2021"]-df2["1980"])/df2["1980"]
-df2_sorted = df2.sort_values(by = "évolution", ascending = False)
-rise_cons = df2_sorted.iloc[1:6]
-rise_cons 
-
-# Tracé de l'évolution de la consommation de 3 premiers pays au cours du temps 
-X = np.arange(1980, 2022)
-f1 = rise_cons.iloc[0, 3:-1].tolist()
-f2 = rise_cons.iloc[1, 3:-1].tolist()
-f3 = rise_cons.iloc[2, 3:-1].tolist()
-plt.plot(X, f1, label = rise_cons.iloc[0, 0])
-plt.plot(X, f2, label = rise_cons.iloc[1, 0])
-plt.plot(X, f3, label = rise_cons.iloc[2,0])
-plt.legend()
-plt.title('Top 3 des pays ayant eu la plus grande croissnace en terme de production energie')
-plt.show()
-
-# +
-X = np.arange(1980, 2022)
-
-# fonction donnant le dataframe des 5 plus grand générateur ou consommateur d'une région 
-def tab_par_region(region, feature):
-    mask = (df["Features"] == feature)|(df["Region"] == region)
-    df2 = df[mask]
-    df2["1980"] = pd.to_numeric(df["1980"])
-    df2["2021"] = pd.to_numeric(df["2021"])
-    df2["évolution"] = (df2["2021"]-df2["1980"])/df2["2021"]
-    df2_sorted = df2.sort_values(by = "évolution", ascending = False)
-    return df2.iloc[1:6]
-    
-# Tracé de celui d'Afrique par exemple
-
-df = tab_par_region("Africa","net consumption")
-f1 = df.iloc[0, 3:-1].tolist()
-f2 = df.iloc[1, 3:-1].tolist()
-f3 = df.iloc[2, 3:-1].tolist()
-plt.plot(X, f1, label = df.iloc[0, 0])
-plt.plot(X, f2, label = df.iloc[1, 0])
-plt.plot(X, f3, label = df.iloc[2,0])
-plt.legend()
-plt.title('Top 3')
-plt.show()
-#Fin partie 
-
-
 ## Le but de cette partie est de s'intéresser à la consommation totale et la prodution totale par année de chaque continent en kwH 
 df = pd.read_csv('world-country-electricity.csv',na_values=("--","ie"))
 
@@ -191,7 +111,6 @@ North_America_gen = df_gen[df_gen['Region'] == 'North America']
 
 Central_South_America_cons = df_cons[df_cons['Region'] == 'Central & South America']
 Central_South_America_gen = df_gen[df_gen['Region'] == 'Central & South America']
->>>>>>> 1b732e6011287f917ab5c38a15ef35890fc66042
 
 
 
@@ -318,93 +237,3 @@ plt.legend()
 plt.show()
 
 ### fin de la partie 
-
-# Le but de ce code est de renvoyer un tableau contenant le pourcentage représentés par les pertes d'énergie par rapport à la consommation totale d'énergie pour chaque pays sur la période temporelle 1980/2021. Les dernières lignes de codes renvoient le graphe de l'évolution de ce ratio pour le cas de l'Afghanistan.
-import pandas as pd
-
-import numpy as np
-
-import matplotlib.pyplot as plt
-
-import seaborn as sns
-
-df = pd.read_csv('world-country-electricity.csv', na_values= ['--' , 'ie'])
-
-
-
-df
-
-df['Features'] = df['Features'].str.strip()
-
-df['Country'] = df['Country'].str.strip()
-
-
-
-
-
-
-
-
-
-
-
-
-
-ratio_pertes = df.drop(columns = ['Features' , 'Region'])
-
-ratio_pertes
-
-ratio_pertes.drop_duplicates('Country')
-
-
-
-df_pertes_consos = df[df['Features'].isin(['net consumption','distribution losses'])]
-
-years = df_pertes_consos.columns[3::]
-years
-
-df_all = df_pertes_consos.pivot_table(columns = ['Country', 'Features'] , values = years)
-
-
-
-
-
-
-
-
-
-
-
-countries = ratio_pertes.columns
-
-countries
-
-ratio_pertes = ratio_pertes.pivot_table(columns = ['Country'] , values = years)
-
-ratio_pertes
-
-ratio_pertes['Afghanistan'] = df_all['Afghanistan', 'distribution losses']/df_all['Afghanistan', 'net consumption']
-
-ratio_pertes
-
-
-
-
-
-for i in countries:
-    ratio_pertes[i] = df_all[i, 'distribution losses']/df_all[i, 'net consumption']
-
-ratio_pertes
-
-ratio_pertes_epures = ratio_pertes.dropna(axis = 1)
-
-ratio_pertes_epures
-
-x = ratio_pertes_epures['Afghanistan']
-plt.figure(figsize=(20, 50))
-plt.plot(years, x)
-plt.xlabel('Année')
-plt.ylabel('Ratio')
-plt.show()
-
-#fin de la partie
