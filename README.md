@@ -1,5 +1,5 @@
 Données à traiter :
 -> carte énergétique du monde : pays importateurs/pays exportateurs
                                 pays les moins consommateurs / pays les plus consommateurs
-                                calcul de la conso d'énergie par habitant par continent
+                                graphe de la conso par continent en fct des années 
                                 calcul du ratio de pertes % à la conso d'énergie du pays
