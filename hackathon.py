@@ -192,13 +192,9 @@ North_America_gen = df_gen[df_gen['Region'] == 'North America']
 Central_South_America_cons = df_cons[df_cons['Region'] == 'Central & South America']
 Central_South_America_gen = df_gen[df_gen['Region'] == 'Central & South America']
 >>>>>>> 1b732e6011287f917ab5c38a15ef35890fc66042
-
-
-
 L = []
 for i in range (1980,2022,1) : 
     L.append(str(i))
-
 
 Africa_cons_ok = Africa_cons[L]
 
@@ -214,14 +210,12 @@ plt.title("Somme des valeurs de consommation par année")
 plt.yticks([])
 plt.xticks([1980,1988, 1993, 1998, 2003, 2008, 2013, 2018, 2021])
 
-
 EUA_cons_ok = Eurasia_cons[L]
 
 EUA_cons_sommes_par_annee = EUA_cons_ok.sum(axis=0)
 EUA_cons_sommes = EUA_cons_sommes_par_annee.values.tolist()
 
 plt.plot(X,EUA_cons_sommes, label ='Eurasia')
-
 
 EU_cons_ok = Europe_cons[L]
 
@@ -243,7 +237,6 @@ ME_cons_sommes = ME_cons_sommes_par_annee.values.tolist()
 
 plt.plot(X,ME_cons_sommes,label='Middle East')
 
-
 NO_cons_ok = North_America_cons[L]
 NO_cons_sommes_par_annee = NO_cons_ok.sum(axis=0)
 NO_cons_sommes = NO_cons_sommes_par_annee.values.tolist()
@@ -257,7 +250,6 @@ CS_cons_sommes = CS_cons_sommes_par_annee.values.tolist()
 plt.plot(X,CS_cons_sommes,label='Central South America')
 plt.legend()
 plt.show()
-
 
 Africa_gen_ok = Africa_gen[L]
 
@@ -273,14 +265,12 @@ plt.title("Somme des valeurs de production par année")
 plt.yticks([])
 plt.xticks([1980,1988, 1993, 1998, 2003, 2008, 2013, 2018, 2021])
 
-
 EUA_gen_ok = Eurasia_gen[L]
 
 EUA_gen_sommes_par_annee = EUA_gen_ok.sum(axis=0)
 EUA_gen_sommes = EUA_gen_sommes_par_annee.values.tolist()
 
 plt.plot(X,EUA_gen_sommes, label ='Eurasia')
-
 
 EU_gen_ok = Europe_gen[L]
 
@@ -302,7 +292,6 @@ ME_gen_sommes = ME_gen_sommes_par_annee.values.tolist()
 
 plt.plot(X,ME_gen_sommes,label='Middle East')
 
-
 NO_gen_ok = North_America_gen[L]
 NO_gen_sommes_par_annee = NO_gen_ok.sum(axis=0)
 NO_gen_sommes = NO_gen_sommes_par_annee.values.tolist()
@@ -320,85 +309,33 @@ plt.show()
 ### fin de la partie 
 
 # Le but de ce code est de renvoyer un tableau contenant le pourcentage représentés par les pertes d'énergie par rapport à la consommation totale d'énergie pour chaque pays sur la période temporelle 1980/2021. Les dernières lignes de codes renvoient le graphe de l'évolution de ce ratio pour le cas de l'Afghanistan.
-import pandas as pd
-
-import numpy as np
-
-import matplotlib.pyplot as plt
 
 import seaborn as sns
 
 df = pd.read_csv('world-country-electricity.csv', na_values= ['--' , 'ie'])
-
-
-
-df
-
 df['Features'] = df['Features'].str.strip()
-
 df['Country'] = df['Country'].str.strip()
-
-
-
-
-
-
-
-
-
-
-
-
 
 ratio_pertes = df.drop(columns = ['Features' , 'Region'])
 
-ratio_pertes
-
 ratio_pertes.drop_duplicates('Country')
-
-
 
 df_pertes_consos = df[df['Features'].isin(['net consumption','distribution losses'])]
 
 years = df_pertes_consos.columns[3::]
-years
 
 df_all = df_pertes_consos.pivot_table(columns = ['Country', 'Features'] , values = years)
 
-
-
-
-
-
-
-
-
-
-
 countries = ratio_pertes.columns
-
-countries
 
 ratio_pertes = ratio_pertes.pivot_table(columns = ['Country'] , values = years)
 
-ratio_pertes
-
 ratio_pertes['Afghanistan'] = df_all['Afghanistan', 'distribution losses']/df_all['Afghanistan', 'net consumption']
-
-ratio_pertes
-
-
-
-
 
 for i in countries:
     ratio_pertes[i] = df_all[i, 'distribution losses']/df_all[i, 'net consumption']
 
-ratio_pertes
-
 ratio_pertes_epures = ratio_pertes.dropna(axis = 1)
-
-ratio_pertes_epures
 
 x = ratio_pertes_epures['Afghanistan']
 plt.figure(figsize=(20, 50))
